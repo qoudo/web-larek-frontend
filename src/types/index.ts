@@ -73,6 +73,10 @@ export interface IProduct extends RemoteAPI.IProduct {
 	buttonTitle?: string;
 }
 
+export interface IActions {
+	onClick: (event: MouseEvent) => void;
+}
+
 export interface IBasket {
 	items: HTMLElement[];
 	total: number;
