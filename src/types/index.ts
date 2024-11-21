@@ -96,3 +96,7 @@ export interface IBasket {
 	items: HTMLElement[];
 	total: number;
 }
+
+export interface IDone {
+	result: number;
+}
