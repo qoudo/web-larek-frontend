@@ -291,7 +291,7 @@ yarn build
 `constructor(container: HTMLElement, actions: IActions)` - Принимающий контейнер и элемент для управления событиями.
 
 **Свойства**:
-- `close: HTMLElement;` - Кнопка закрытия сообщения;
+- `closeButton: HTMLButtonElement;` - Кнопка закрытия сообщения;
 - `result: HTMLElement;` - Сообщение о деталях успешной операции.
 
 **Методы**:
