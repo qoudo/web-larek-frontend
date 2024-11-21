@@ -175,8 +175,8 @@ yarn build
 - `errorOutput: HTMLElement` - Элемент для отображения ошибок валидации форм.
 
 **Методы**:
-- `set success(value: boolean)` - Cеттер для валидности формы, задает значение статуса success;
-- `set error(value: string)` - Cеттер для ошибок валидации формы;
+- `set success(value: boolean)` - Сеттер для валидности формы, задает значение статуса success;
+- `set error(value: string)` - Сеттер для ошибок валидации формы;
 - `render(state: IFormState)` - Обновляет состояние формы с заданными значениями валидности, ошибками и значениями полей;
 - `onInputChange(field, value: string)` - Обработчик событий ввода, который генерирует события изменения для каждого поля.
 
@@ -188,8 +188,8 @@ yarn build
 `constructor(container: HTMLFormElement, events: IEvents)` - Принимает контейнер для формы и событие для управления.
 
 **Методы**:
-- `set phone(value: string)` - Cеттер, задает номер телефона;
-- `set email(value: string)` - Cеттер, задает почту.
+- `set phone(value: string)` - Сеттер, задает номер телефона;
+- `set email(value: string)` - Сеттер, задает почту.
 
 #### Класс `Delivery`
 
@@ -203,7 +203,7 @@ yarn build
 - `cashButton: HTMLButtonElement` - Кнопка оплатить "При получении"".
 
 **Методы**:
-- `set address(value: string)` - Cеттер, задает адрес доставки;
+- `set address(value: string)` - Сеттер, задает адрес доставки;
 - `set toggleButtons()` - Изменяет состояние кнопок оплаты, в зависимости от выбранной.
 
 #### Класс `Modal`
