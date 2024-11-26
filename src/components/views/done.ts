@@ -1,16 +1,15 @@
-import {Component} from "../base/component";
-import {ensureElement} from "../../utils/utils";
-import { IDone, IActions } from "../../types";
+import { Component } from '../base/component';
+import { ensureElement } from '../../utils/utils';
+import { IDone, IActions } from '../../types';
 
 /**
  * Класс для отображения окна успешного оформления заказа
- * @extends Component<IDone>
  */
 export class Done extends Component<IDone> {
     /** Кнопка закрытия окна */
-    protected _close: HTMLElement;
+    protected _closeButton: HTMLElement;
     /** Элемент отображения итоговой суммы */
-    protected _total: HTMLElement;
+    protected _result: HTMLElement;
 
     /**
      * Создает экземпляр окна успешного заказа
@@ -21,12 +20,12 @@ export class Done extends Component<IDone> {
         super(container);
 
         // Инициализация элементов
-        this._close = ensureElement<HTMLElement>('.order-success__close', this.container);
-        this._total = ensureElement<HTMLElement>('.order-success__description', this.container);
+        this._closeButton = ensureElement<HTMLElement>('.order-success__close', this.container);
+        this._result = ensureElement<HTMLElement>('.order-success__description', this.container);
 
         // Добавление обработчика клика на кнопку закрытия
         if (actions?.onClick) {
-            this._close.addEventListener('click', actions.onClick);
+            this._closeButton.addEventListener('click', actions.onClick);
         }
     }
 
@@ -34,7 +33,7 @@ export class Done extends Component<IDone> {
      * Устанавливает текст с итоговой суммой заказа
      * @param {string} value - Сумма заказа
      */
-    set total(value: string) {
-        this._total.textContent = `Списано ${value} синапсов`;
+    set result(value: string) {
+        this._result.textContent = `Списано ${value} синапсов`;
     }
 }

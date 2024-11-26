@@ -1,6 +1,6 @@
-import {Component} from "../base/component";
-import {IProduct, IActions} from "../../types";
-import {ensureElement} from "../../utils/utils";
+import { Component } from '../base/component';
+import { IProduct, IActions } from '../../types';
+import { ensureElement } from '../../utils/utils';
 
 const CATEGORY_STYLES = {
   soft: {
@@ -26,17 +26,15 @@ const CATEGORY_STYLES = {
 
 /**
  * Класс управления карточкой товара
- * @extends Component<IProduct>
  */
 export class Card extends Component<IProduct> {
   protected _title: HTMLElement;
+  protected _description?: HTMLElement;
+  protected _category?: HTMLElement;
   protected _price: HTMLElement;
   protected _image?: HTMLImageElement;
-  protected _description?: HTMLElement;
   protected _button?: HTMLButtonElement;
-  protected _category?: HTMLElement;
   protected _index?: HTMLElement;
-  protected _buttonTitle: string;
 
   /**
    * Создает экземпляр карточки товара
@@ -48,11 +46,11 @@ export class Card extends Component<IProduct> {
 
     // Инициализация элементов карточки
     this._title = ensureElement<HTMLElement>('.card__title', container);
+    this._description = container.querySelector('.card__text');
+    this._category = container.querySelector('.card__category');
     this._price = ensureElement<HTMLElement>('.card__price', container);
     this._image = container.querySelector('.card__image');
     this._button = container.querySelector('.card__button');
-    this._description = container.querySelector('.card__text');
-    this._category = container.querySelector('.card__category');
     this._index = container.querySelector('.basket__item-index');
 
     // Привязка обработчика клика
@@ -63,22 +61,6 @@ export class Card extends Component<IProduct> {
         container.addEventListener('click', actions.onClick);
       }
     }
-  }
-
-  /**
-   * Устанавливает идентификатор карточки
-   * @param {string} value - Идентификатор
-   */
-  set id(value: string) {
-    this.container.dataset.id = value;
-  }
-
-  /**
-   * Получает идентификатор карточки
-   * @returns {string} Идентификатор
-   */
-  get id(): string {
-    return this.container.dataset.id || '';
   }
 
   /**
@@ -98,20 +80,11 @@ export class Card extends Component<IProduct> {
   }
 
   /**
-   * Устанавливает цену товара
-   * @param {number | null} value - Цена
+   * Устанавливает описание товара
+   * @param {string} value - Описание
    */
-  set price(value: number | null) {
-    this.setText(this._price, value ? `${value.toString()} синапсов` : '');
-    this.disableButton(value);
-  }
-
-  /**
-   * Получает цену товара
-   * @returns {number} Цена
-   */
-  get price(): number {
-    return Number(this._price.textContent || '');
+  set description(value: string) {
+    this.setText(this._description, value);
   }
 
   /**
@@ -120,31 +93,15 @@ export class Card extends Component<IProduct> {
    */
   set category(value: string) {
     this.setText(this._category, value);
-    this._category.classList.add(this.classByCategory(value));
+    this._category.classList.add(this.getStyleCategory(value));
   }
 
   /**
-   * Получает категорию товара
-   * @returns {string} Категория
+   * Устанавливает цену товара
+   * @param {number | null} value - Цена
    */
-  get category(): string {
-    return this._category.textContent || '';
-  }
-
-  /**
-   * Устанавливает индекс товара в корзине
-   * @param {string} value - Индекс
-   */
-  set index(value: string) {
-    this._index.textContent = value;
-  }
-
-  /**
-   * Получает индекс товара в корзине
-   * @returns {string} Индекс
-   */
-  get index(): string {
-    return this._index.textContent || '';
+  set price(value: number | null) {
+    this.setText(this._price, value ? `${value.toString()} синапсов` : '');
   }
 
   /**
@@ -156,11 +113,11 @@ export class Card extends Component<IProduct> {
   }
 
   /**
-   * Устанавливает описание товара
-   * @param {string} value - Описание
+   * Устанавливает индекс товара в корзине
+   * @param {string} value - Индекс
    */
-  set description(value: string) {
-    this.setText(this._description, value);
+  set index(value: string) {
+    this._index.textContent = value;
   }
 
   /**
@@ -174,11 +131,11 @@ export class Card extends Component<IProduct> {
   }
 
   /**
-   * Определяет CSS-класс по категории товара
+   * Определяет стили по категории товара
    * @param {string} value - Категория
    * @returns {string} CSS-класс
    */
-  private classByCategory(value: string): string {
+  private getStyleCategory(value: string): string {
     switch (value) {
       case CATEGORY_STYLES.soft.name:
         return CATEGORY_STYLES.soft.className;
@@ -190,16 +147,6 @@ export class Card extends Component<IProduct> {
         return CATEGORY_STYLES.additional.className;
       default:
         return CATEGORY_STYLES.other.className;
-    }
-  }
-
-  /**
-   * Отключает кнопку если цена не установлена
-   * @param {number | null} value - Цена
-   */
-  private disableButton(value: number | null) {
-    if (!value && this._button) {
-      this._button.disabled = true;
     }
   }
 }

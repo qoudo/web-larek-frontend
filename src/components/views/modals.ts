@@ -1,11 +1,10 @@
-import {Component} from "../base/component";
-import {ensureElement} from "../../utils/utils";
-import {IModal} from "../../types";
+import { Component } from '../base/component';
+import { ensureElement } from '../../utils/utils';
+import { IModal } from '../../types';
 import { IEvents } from '../base/events';
 
 /**
  * Класс для управления модальными окнами
- * @extends Component<IModal>
  */
 export class Modals extends Component<IModal> {
     /** Кнопка закрытия модального окна */
@@ -42,7 +41,6 @@ export class Modals extends Component<IModal> {
 
     /**
      * Открывает модальное окно
-     * @fires modal:open
      */
     open() {
         this.container.classList.add('modal_active');
@@ -51,7 +49,6 @@ export class Modals extends Component<IModal> {
 
     /**
      * Закрывает модальное окно и очищает содержимое
-     * @fires modal:close
      */
     close() {
         this.container.classList.remove('modal_active');
@@ -60,7 +57,7 @@ export class Modals extends Component<IModal> {
     }
 
     /**
-     * Отрисовывает модальное окно с переданными данными
+     * Обновляет модальное окно с переданными данными
      * @param {IModal} data - Данные для отображения
      * @returns {HTMLElement} Контейнер модального окна
      */

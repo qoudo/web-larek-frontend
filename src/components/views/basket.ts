@@ -1,15 +1,14 @@
-import {Component} from "../base/component";
-import {EventEmitter} from "../base/events";
-import {createElement, ensureElement} from "../../utils/utils";
-import { IBasket } from "../../types";
+import { Component } from '../base/component';
+import { EventEmitter } from '../base/events';
+import { createElement, ensureElement } from '../../utils/utils';
+import { IBasket } from '../../types';
 
 /**
  * Класс управления корзиной товаров
- * @extends Component<IBasket>
  */
 export class Basket extends Component<IBasket> {
-  protected _list: HTMLElement;
-  protected _total: HTMLElement;
+  protected _productList: HTMLElement;
+  protected _totalCost: HTMLElement;
   protected _button: HTMLButtonElement;
 
   /**
@@ -21,8 +20,8 @@ export class Basket extends Component<IBasket> {
     super(container);
 
     // Инициализация элементов корзины
-    this._list = ensureElement<HTMLElement>('.basket__list', this.container);
-    this._total = ensureElement<HTMLElement>('.basket__price', this.container);
+    this._productList = ensureElement<HTMLElement>('.basket__list', this.container);
+    this._totalCost = ensureElement<HTMLElement>('.basket__price', this.container);
     this._button = ensureElement<HTMLButtonElement>('.basket__button', this.container);
 
     // Добавление обработчика клика по кнопке заказа
@@ -31,7 +30,7 @@ export class Basket extends Component<IBasket> {
     });
 
     // Начальная инициализация
-    this.items = [];
+    this.productList = [];
     this.toggleButton(true);
   }
 
@@ -39,11 +38,11 @@ export class Basket extends Component<IBasket> {
    * Устанавливает элементы корзины
    * @param {HTMLElement[]} items - Массив элементов корзины
    */
-  set items(items: HTMLElement[]) {
+  set productList(items: HTMLElement[]) {
     if (items.length) {
-      this._list.replaceChildren(...items);
+      this._productList.replaceChildren(...items);
     } else {
-      this._list.replaceChildren(
+      this._productList.replaceChildren(
         createElement<HTMLParagraphElement>('p', {
           textContent: 'Корзина пуста'
         })
@@ -55,8 +54,8 @@ export class Basket extends Component<IBasket> {
    * Устанавливает общую стоимость
    * @param {number} total - Общая сумма
    */
-  set total(total: number) {
-    this.setText(this._total, `${total.toString()} синапсов`);
+  set totalCost(total: number) {
+    this.setText(this._totalCost, `${total.toString()} синапсов`);
   }
 
   /**

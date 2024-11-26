@@ -1,10 +1,8 @@
 import { Api, ApiListResponse } from './api';
-import { RemoteAPI, IProduct, IOrder, ILarekAPI } from "../../types";
+import { RemoteAPI, IProduct, IOrder, ILarekAPI } from '../../types';
 
 /**
  * Класс для работы с API интернет-магазина Ларек
- * @extends Api
- * @implements ILarekAPI
  */
 export class LarekAPI extends Api implements ILarekAPI {
   /** Базовый URL CDN сервера для загрузки изображений */
@@ -22,6 +20,19 @@ export class LarekAPI extends Api implements ILarekAPI {
   }
 
   /**
+   * Получает список всех доступных товаров
+   * @returns {Promise<RemoteAPI.IProduct[]>} Промис со списком товаров
+   */
+  getProductList(): Promise<RemoteAPI.IProduct[]> {
+    return this.get('/product').then((data: ApiListResponse<RemoteAPI.IProduct>) =>
+      data.items.map((item) => ({
+        ...item,
+        image: this.cdn + item.image // Добавляем CDN префикс к путям изображений
+      }))
+    );
+  }
+
+  /**
    * Получает информацию о конкретном товаре
    * @param {string} id - Идентификатор товара
    * @returns {Promise<IProduct>} Промис с данными товара
@@ -36,24 +47,11 @@ export class LarekAPI extends Api implements ILarekAPI {
   }
 
   /**
-   * Получает список всех доступных товаров
-   * @returns {Promise<RemoteAPI.IProduct[]>} Промис со списком товаров
-   */
-  getProductList(): Promise<RemoteAPI.IProduct[]> {
-    return this.get('/product').then((data: ApiListResponse<RemoteAPI.IProduct>) =>
-      data.items.map((item) => ({
-        ...item,
-        image: this.cdn + item.image // Добавляем CDN префикс к путям изображений
-      }))
-    );
-  }
-
-  /**
    * Отправляет заказ на сервер
    * @param {IOrder} order - Данные заказа
    * @returns {Promise<RemoteAPI.IOrder>} Промис с данными созданного заказа
    */
-  orderProducts(order: IOrder): Promise<RemoteAPI.IOrder> {
+  postOrderProducts(order: IOrder): Promise<RemoteAPI.IOrder> {
     return this.post(`/order`, order).then(
       (data: RemoteAPI.IOrder) => data
     );

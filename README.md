@@ -85,10 +85,13 @@ yarn build
 **Конструктор**:
 `constructor(baseUrl, options)` - Принимает URL для API и параметры запроса.
 
+**Свойства**:
+- `cdn: string` - Базовый URL CDN сервера для загрузки изображений;
+
 **Методы**:
 - `getProductList(): Promise<RemoteAPI.IProduct[]>` - Получает полный список товаров с сервера;
 - `getProductItem(id: string): Promise<RemoteAPI.IProduct>` - Получает информацию о конкретном продукте по его `id`;
-- `orderProducts(order: IOrder): Promise<RemoteAPI.IOrder>` - Отправляет информацию о заказе на сервер и получает результат.
+- `postOrderProducts(order: IOrder): Promise<RemoteAPI.IOrder>` - Отправляет информацию о заказе на сервер и получает результат.
 
 #### Класс `Model`
 
@@ -111,9 +114,8 @@ yarn build
 `constructor(container: HTMLElement)` - Принимает контейнер, в котором создаётся элемент.
 
 **Методы**:
-- `toggleClass(element: HTMLElement, className: string)` - Включает или отключает класс на элементе;
-- `toggleVisible (element: HTMLElement)` - Показывает/скрывает элемент;
 - `setContent(element: HTMLElement, value: Record<string, any>)` - Устанавливает содержимое для элемента;
+- `setImage (element: HTMLImageElement, src: string, alt?: string)` - Устанавливает картинку;
 - `render(data)` - Обновляет компонент.
 
 
@@ -149,15 +151,19 @@ yarn build
 - `removeProduct(product: Product)` - Удаляет товар из корзины;
 - `setCatalog(catalogs: IProduct[])` - Заполняет каталог товаров;
 - `setPreview(product: Product)` - Устанавливает товар для предпросмотра;
-- `setDelivery(data: IDelivery)` - Заполняет поля формы доставки;
-- `setContact(data: IDelivery)` - Заполняет поля формы контакта.
+- `setDelivery(field: keyof IDelivery, value: string)` - Заполняет поля формы доставки;
+- `setContact(field: keyof IContact, value: string)` - Заполняет поля формы контакта;
 - `removeOrder()` - Удаляет данные заказа;
+- `updateBasket()` - Оповещает об изменениях в корзине;
+- `validateDelivery()` - Проверяет валидность данных доставки;
+- `validateContact()` - Проверяет валидность контактных данных.
 
 **Свойства**:
 - `basket: RemoteAPI.Product[]` - Массив товаров в корзине;
 - `catalog: RemoteAPI.Product[]` - Массив товаров в каталоге;
 - `order: IOrder` - Данные о заказе;
-- `formErrors: FormErrors` - Ошибки валидации форм.
+- `formErrors: FormErrors` - Ошибки валидации форм;
+- `productPreviewId: string | null` - ID товара для предпросмотра.
 
 ### Классы для работы с отображением
 
@@ -176,9 +182,9 @@ yarn build
 
 **Методы**:
 - `set success(value: boolean)` - Сеттер для валидности формы, задает значение статуса success;
-- `set error(value: string)` - Сеттер для ошибок валидации формы;
-- `render(state: IFormState)` - Обновляет состояние формы с заданными значениями валидности, ошибками и значениями полей;
-- `onInputChange(field, value: string)` - Обработчик событий ввода, который генерирует события изменения для каждого поля.
+- `set errors(value: string)` - Сеттер для ошибок валидации формы;
+- `onInputChange(field: keyof T, value: string)` - Обработчик событий ввода, который генерирует события изменения для каждого поля.
+- `render(state: Partial<T> & IFormState)` - Обновляет состояние формы с заданными значениями валидности, ошибками и значениями полей;
 
 #### Класс `Contacts`
 
@@ -186,10 +192,6 @@ yarn build
 
 **Конструктор**:
 `constructor(container: HTMLFormElement, events: IEvents)` - Принимает контейнер для формы и событие для управления.
-
-**Методы**:
-- `set phone(value: string)` - Сеттер, задает номер телефона;
-- `set email(value: string)` - Сеттер, задает почту.
 
 #### Класс `Delivery`
 
@@ -203,7 +205,6 @@ yarn build
 - `cashButton: HTMLButtonElement` - Кнопка оплатить "При получении"".
 
 **Методы**:
-- `set address(value: string)` - Сеттер, задает адрес доставки;
 - `set toggleButtons()` - Изменяет состояние кнопок оплаты, в зависимости от выбранной.
 
 #### Класс `Modals`
@@ -219,7 +220,8 @@ yarn build
 
 **Методы**:
 - `set content(value: HTMLElement)` - Сеттер для содержимого модального окна;
-- `toggleModal()` - Открывает/закрывает модальное окно;
+- `open()` - Открывает модальное окно;
+- `close()` - Закрывает модальное окно;
 - `render(data: IModal)` - Обновляет модальное окно.
 
 #### Класс `Page`
@@ -232,10 +234,13 @@ yarn build
 **Свойства**:
 - `counter: HTMLElement;` - Счётчик корзины;
 - `catalog: HTMLElement;` - Каталог товаров;
+- `wrapper: HTMLElement;` - Обертка страницы;
+- `сartButton: HTMLElement;` - Кнопка корзины;
 
 **Методы**:
 - `set counter(value: number)` - Сеттер для изменения кол-ва товаров в корзине;
 - `set catalogItems(items: HTMLElement[])` - Сеттер задает элементы каталога;
+- `set handleCartClick()` - Обработчик клика по кнопке корзины;
 
 #### Класс `Card`
 
@@ -248,25 +253,24 @@ yarn build
 `constructor(teamplate: HTMLElement, actions: IActions)` - Принимает шаблон карточки и действие.
 
 **Свойства**:
-- `id: number` - Идентификатор;
 - `title: HTMLElement` - Заголовок;
 - `description: HTMLElement` - Описание;
 - `category: HTMLElement` - Элемент для категории товара;
 - `price: HTMLElement` - Цена;
 - `image: HTMLImageElement` - Картинка;
 - `button: HTMLButtonElement` - Кнопка действия на карточке;
+- `index: HTMLElement` - Индекс элемента;
 
 **Методы**:
-- `set id(value: string)` - Сеттер идентификатора;
 - `set title(value: string)` - Сеттер заголовка;
 - `set description(value: string)` - Сеттер описания;
 - `set category(value: string)` - Сеттер категории;
 - `set price(value: number)` - Сеттер цены;
 - `set image(value: string)` - Сеттер изображения;
-- `get id()` - Геттер идентификатора;
+- `set index(value: string)` - Сеттер индекса товара;
+- `set buttonTitle(value: string)` - Сеттер текста кнопки;
 - `get title()` - Геттер заголовка;
-- `get category()` - Геттер категории;
-- `get price()` - Геттер цены;
+- `classByCategory(value: string)` - Устанавливает текст кнопки;
 
 #### Класс `Basket`
 
@@ -278,10 +282,12 @@ yarn build
 **Свойства**:
 - `productList: HTMLElement` - Коллекция товаров.
 - `totalCost: HTMLElement` - Стоимость товаров.
+- `_button: HTMLElement` - Кнопка корзины.
 
 **Методы класса**:
 - `set productList(items: HTMLElement[])` - Сеттер, устанавливает список товаров;
 - `set totalCost(total: number)` - Сеттер, устанавливает общую стоимость;
+- `set toggleButton(disabled: boolean)` - Включает/выключает кнопку заказа;
 
 
 #### Класс `Done`
@@ -296,3 +302,24 @@ yarn build
 
 **Методы**:
 - `set result(value: string)` - Сеттер сообщения об итоговой стоимости операции.
+
+## Описание событий
+
+| Событие | Описание |
+|----------|-----------|
+| `items:changed` | Событие изменения списка товаров |
+| `preview:changed` | Событие изменения предпросмотра товара |
+| `counter:changed` | Событие изменения счетчика |
+| `basket:changed` | Событие изменения корзины |
+| `formErrors:change` | Событие изменения ошибок в форме |
+| `delivery:ready` | Событие готовности формы доставки |
+| `contact:ready` | Событие готовности контактных данных |
+| `payment:toggle` | Событие переключения способа оплаты |
+| `product:toggle` | Событие переключения товара (добавление/удаление) |
+| `card:select` | Событие выбора карты оплаты |
+| `order:submit` | Событие отправки заказа |
+| `contacts:submit` | Событие отправки контактных данных |
+| `order:open` | Событие открытия формы заказа |
+| `product:add` | Событие добавления товара |
+| `product:delete` | Событие удаления товара |
+| `basket:opened` | Событие открытия корзины |

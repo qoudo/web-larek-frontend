@@ -10,7 +10,6 @@ export type CatalogChangeEvent = {
 
 /**
  * Класс, представляющий товар в магазине
- * @extends Model<RemoteAPI.IProduct>
  */
 export class Product extends Model<RemoteAPI.IProduct> {
 	/** Уникальный идентификатор товара */

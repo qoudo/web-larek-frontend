@@ -1,21 +1,7 @@
 import { IEvents } from './events';
 
 /**
- * Type guard для проверки является ли объект экземпляром Model
- * @param obj - Проверяемый объект
- * @returns true если объект является экземпляром Model, иначе false
- * @example
- * if (isModel(someObject)) {
- *   // someObject is instance of Model
- * }
- */
-export const isModel = (obj: unknown): obj is Model<unknown> => {
-    return obj instanceof Model;
-}
-
-/**
  * Абстрактный базовый класс для моделей данных
- * @template T - Тип данных модели
  */
 export abstract class Model<T> {
     /**
@@ -31,8 +17,6 @@ export abstract class Model<T> {
      * Оповещает подписчиков об изменениях в модели
      * @param event - Название события
      * @param payload - Дополнительные данные события
-     * @example
-     * model.emitChanges('userUpdated', { id: 1 });
      */
     protected emitChanges(event: string, payload: object = {}): void {
         this.events.emit(event, payload);

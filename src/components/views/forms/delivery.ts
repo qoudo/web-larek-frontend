@@ -1,11 +1,10 @@
-import {Form} from "./form";
-import {IDelivery, IActions} from "../../../types";
-import {ensureElement} from "../../../utils/utils";
+import { Form } from './form';
+import { IDelivery, IActions } from '../../../types';
+import { ensureElement } from '../../../utils/utils';
 import { IEvents } from '../../base/events';
 
 /**
  * Класс для управления формой доставки
- * @extends Form<IDelivery>
  */
 export class Delivery extends Form<IDelivery> {
   /** Кнопка оплаты картой */
@@ -17,7 +16,7 @@ export class Delivery extends Form<IDelivery> {
   /**
    * Создает экземпляр формы доставки
    * @param {HTMLFormElement} container - HTML элемент формы
-   * @param {IEvents} events - Система событий
+   * @param {IEvents} events - Событие
    * @param {IActions} [actions] - Обработчики действий
    */
   constructor(container: HTMLFormElement, events: IEvents, actions?: IActions) {
@@ -43,16 +42,5 @@ export class Delivery extends Form<IDelivery> {
   toggleButtons(): void {
     this._cardButton.classList.toggle('button_alt-active');
     this._cashButton.classList.toggle('button_alt-active');
-  }
-
-  /**
-   * Устанавливает значение адреса доставки
-   * @param {string} value - Адрес доставки
-   */
-  set address(value: string) {
-    const addressInput = this.container.elements.namedItem('address') as HTMLInputElement;
-    if (addressInput) {
-      addressInput.value = value;
-    }
   }
 }

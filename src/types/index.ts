@@ -39,7 +39,7 @@ export interface IOrder extends IOrderForm, IContact {
 export interface ILarekAPI {
 	getProductList: () => Promise<RemoteAPI.IProduct[]>;
 	getProductItem: (id: string) => Promise<RemoteAPI.IProduct>;
-	orderProducts: (order: IOrder) => Promise<RemoteAPI.IOrder>;
+	postOrderProducts: (order: IOrder) => Promise<RemoteAPI.IOrder>;
 }
 
 /** Ошибки валидации форм. */
@@ -65,7 +65,7 @@ export interface IDelivery {
 
 /** Состояние формы. */
 export interface IFormState {
-	valid: boolean;
+	success: boolean;
 	errors: string[];
 }
 
