@@ -8,21 +8,21 @@ export const settings = {
 /** Константа событий */
 export const EVENTS = {
 	itemsChanged: 'items:changed',
-	previewChange: 'preview:changed',
+	previewChanged: 'preview:changed',
 	counterChanged: 'counter:changed',
 	basketChanged: 'basket:changed',
-	formErrorsChange: 'formErrors:change',
+	formErrorsChanged: 'formErrors:changed',
 	deliveryReady: 'delivery:ready',
-	contactReady: 'contact:ready',
+	contactsReady: 'contacts:ready',
 	paymentToggle: 'payment:toggle',
 	productToggle: 'product:toggle',
-	cardSelect: 'card:select',
+	orderOpen: 'order:open',
+	basketOpen: 'basket:open',
 	orderSubmit: 'order:submit',
 	contactsSubmit: 'contacts:submit',
-	orderOpen: 'order:open',
+	cardSelect: 'card:select',
 	productAdd: 'product:add',
 	productDelete: 'product:delete',
-	basketOpen: 'basket:open',
 };
 
 /** Методы оплаты */

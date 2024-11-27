@@ -2,6 +2,7 @@ import { Component } from '../base/component';
 import { IPage } from '../../types';
 import { ensureElement } from '../../utils/utils';
 import { IEvents } from '../base/events';
+import { EVENTS } from '../../utils/constants';
 
 /**
  * Класс, представляющий основную страницу приложения
@@ -54,6 +55,6 @@ export class Page extends Component<IPage> {
    * Обработчик клика по кнопке корзины
    */
   private handleCartClick(): void {
-    this.events.emit('basket:open');
+    this.events.emit(EVENTS.basketOpen);
   }
 }

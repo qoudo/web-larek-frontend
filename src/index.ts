@@ -7,11 +7,11 @@ import { API_URL, CDN_URL, EVENTS, PaymentMethods } from './utils/constants';
 import { Page } from './components/views/page';
 import { Basket } from './components/views/basket';
 import { Delivery } from './components/views/forms/delivery';
-import { Contact } from './components/views/forms/contact';
+import { Contacts } from './components/views/forms/contacts';
 import { CatalogChangeEvent, Product } from './components/models/product';
 import { Card } from './components/views/card';
 import { Done } from './components/views/done';
-import { IContact, IDelivery, IOrder } from './types';
+import { IContacts, IDelivery, IOrder } from './types';
 import { Modals } from './components/views/modals';
 
 /**
@@ -48,7 +48,7 @@ const components = {
 	delivery: new Delivery(cloneTemplate(templates.delivery), events, {
 		onClick: (ev: Event) => events.emit(EVENTS.paymentToggle, ev.target)
 	}),
-	contact: new Contact(cloneTemplate(templates.contact), events)
+	contacts: new Contacts(cloneTemplate(templates.contact), events)
 };
 
 /**
@@ -77,7 +77,7 @@ const handlers = {
 	 */
 	orderSubmit: () => {
 		modal.render({
-			content: components.contact.render({
+			content: components.contacts.render({
 				email: '',
 				phone: '',
 				success: false,
@@ -110,9 +110,9 @@ const handlers = {
 	errorChange: (errors: Partial<IOrder>) => {
 		const { payment, address, email, phone } = errors;
 		components.delivery.success = !payment && !address;
-		components.contact.success = !email && !phone;
+		components.contacts.success = !email && !phone;
 		components.delivery.errors = Object.values({ payment, address }).filter(Boolean).join('; ');
-		components.contact.errors = Object.values({ phone, email }).filter(Boolean).join('; ');
+		components.contacts.errors = Object.values({ phone, email }).filter(Boolean).join('; ');
 	},
 
 
@@ -135,7 +135,7 @@ const handlers = {
 	 * Обработчик изменения предпросмотра товара
 	 * @param {Product} product - Товар для отображения
 	 */
-	previewChange: (product: Product) => {
+	previewChanged: (product: Product) => {
 		const card = new Card(cloneTemplate(templates.cardPreview), {
 			onClick: () => {
 				events.emit(EVENTS.productToggle, product);
@@ -212,14 +212,14 @@ const subscribeToEvents = () => {
 	events.on(EVENTS.contactsSubmit, handlers.contactsSubmit);
 
 	// Обработка ошибок форм
-	events.on(EVENTS.formErrorsChange, handlers.errorChange);
+	events.on(EVENTS.formErrorsChanged, handlers.errorChange);
 
 	// Обработка изменений полей форм
 	events.on(/^order\..*:change/, (data: { field: keyof IDelivery, value: string }) => {
 		app.setDelivery(data.field, data.value);
 	});
 
-	events.on(/^contacts\..*:change/, (data: { field: keyof IContact, value: string }) => {
+	events.on(/^contacts\..*:change/, (data: { field: keyof IContacts, value: string }) => {
 		app.setContact(data.field, data.value);
 	});
 
@@ -227,7 +227,7 @@ const subscribeToEvents = () => {
 	events.on(EVENTS.orderOpen, handlers.orderOpen)
 
 	// Изменение привью
-	events.on(EVENTS.previewChange, handlers.previewChange)
+	events.on(EVENTS.previewChanged, handlers.previewChanged)
 
   // Открытие карточки товара
 	events.on(EVENTS.cardSelect, (item: Product) => app.setPreview(item))
@@ -257,7 +257,7 @@ const subscribeToEvents = () => {
 	events.on(EVENTS.deliveryReady, () => components.delivery.success = true)
 
   // Заполнена форма данных о контакте
-	events.on(EVENTS.contactReady, () => components.contact.success = true)
+	events.on(EVENTS.contactsReady, () => components.contacts.success = true)
 };
 
 /**

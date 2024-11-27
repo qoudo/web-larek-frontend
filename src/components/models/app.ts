@@ -1,5 +1,5 @@
 import { Model } from '../base/model';
-import { IProduct, IOrder, IDelivery, IContact, IAppState, FormErrors } from '../../types';
+import { IProduct, IOrder, IDelivery, IContacts, IAppState, FormErrors } from '../../types';
 import { Product } from './product';
 import { EVENTS } from '../../utils/constants';
 
@@ -72,7 +72,7 @@ export class App extends Model<IAppState> {
    */
   setPreview(product: Product): void {
     this.productPreviewId = product.id;
-    this.emitChanges(EVENTS.previewChange, product);
+    this.emitChanges(EVENTS.previewChanged, product);
   }
 
   /**
@@ -92,10 +92,10 @@ export class App extends Model<IAppState> {
    * @param field - Ключ поля контактных данных
    * @param value - Новое значение
    */
-  setContact(field: keyof IContact, value: string): void {
+  setContact(field: keyof IContacts, value: string): void {
     this.order[field] = value;
     if(this.validateContact()) {
-      this.events.emit(EVENTS.contactReady, this.order);
+      this.events.emit(EVENTS.contactsReady, this.order);
     }
   }
 
@@ -133,7 +133,7 @@ export class App extends Model<IAppState> {
     }
 
     this.formErrors = errors;
-    this.events.emit(EVENTS.formErrorsChange, this.formErrors);
+    this.events.emit(EVENTS.formErrorsChanged, this.formErrors);
     return Object.keys(errors).length === 0;
   }
 
@@ -152,7 +152,7 @@ export class App extends Model<IAppState> {
     }
 
     this.formErrors = errors;
-    this.events.emit(EVENTS.formErrorsChange, this.formErrors);
+    this.events.emit(EVENTS.formErrorsChanged, this.formErrors);
     return Object.keys(errors).length === 0;
   }
 }

@@ -18,7 +18,7 @@ export namespace RemoteAPI {
 }
 
 /** Контактные данные */
-export interface IContact {
+export interface IContacts {
 	email: string;
 	phone: string;
 }
@@ -30,7 +30,7 @@ export interface IOrderForm {
 }
 
 /** Информация о заказе. */
-export interface IOrder extends IOrderForm, IContact {
+export interface IOrder extends IOrderForm, IContacts {
 	total: number | null;
 	items: string[];
 }
