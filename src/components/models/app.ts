@@ -1,6 +1,5 @@
 import { Model } from '../base/model';
-import { IProduct, IOrder, IDelivery, IContacts, IAppState, FormErrors } from '../../types';
-import { Product } from './product';
+import { IOrder, IDelivery, IContacts, IAppState, FormErrors, RemoteAPI } from '../../types';
 import { EVENTS } from '../../utils/constants';
 
 /**
@@ -8,10 +7,10 @@ import { EVENTS } from '../../utils/constants';
  */
 export class App extends Model<IAppState> {
   /** Корзина с выбранными товарами */
-  basket: Product[] = [];
+  basket: RemoteAPI.IProduct[] = [];
 
   /** Каталог товаров */
-  catalog: Product[];
+  catalog: RemoteAPI.IProduct[];
 
   /** Информация о заказе */
   order: IOrder = {
@@ -19,7 +18,7 @@ export class App extends Model<IAppState> {
     address: '',
     email: '',
     phone: '',
-    total: null,
+    total: 0,
     items: []
   };
 
@@ -33,7 +32,7 @@ export class App extends Model<IAppState> {
    * Добавляет товар в корзину
    * @param product Товар для добавления
    */
-  addProduct(product: Product): void {
+  addProduct(product: RemoteAPI.IProduct): void {
     if(!this.basket.includes(product)) {
       this.basket.push(product);
       this.updateBasket();
@@ -52,7 +51,7 @@ export class App extends Model<IAppState> {
    * Удаляет товар из корзины
    * @param product Товар для удаления
    */
-  removeProduct(product: Product): void {
+  removeProduct(product: RemoteAPI.IProduct): void {
     this.basket = this.basket.filter((it) => it !== product);
     this.updateBasket();
   }
@@ -61,8 +60,8 @@ export class App extends Model<IAppState> {
    * Устанавливает каталог товаров
    * @param catalogs Массив товаров для каталога
    */
-  setCatalog(catalogs: IProduct[]): void {
-    this.catalog = catalogs.map(catalog => new Product(catalog, this.events));
+  setCatalog(catalogs: RemoteAPI.IProduct[]): void {
+    this.catalog = catalogs;
     this.emitChanges(EVENTS.itemsChanged, { catalog: this.catalog});
   }
 
@@ -70,7 +69,7 @@ export class App extends Model<IAppState> {
    * Устанавливает товар для предпросмотра
    * @param product Товар для предпросмотра
    */
-  setPreview(product: Product): void {
+  setPreview(product: RemoteAPI.IProduct): void {
     this.productPreviewId = product.id;
     this.emitChanges(EVENTS.previewChanged, product);
   }
@@ -108,7 +107,7 @@ export class App extends Model<IAppState> {
       address: '',
       email: '',
       phone: '',
-      total: null,
+      total: 0,
       items: []
     };
   }

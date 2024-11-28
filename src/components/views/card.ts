@@ -101,7 +101,8 @@ export class Card extends Component<IProduct> {
    * @param {number | null} value - Цена
    */
   set price(value: number | null) {
-    this.setText(this._price, value ? `${value.toString()} синапсов` : '');
+    this.setText(this._price, value ? `${value.toString()} синапсов` : 'Бесценно');
+    this.disableButton(value);
   }
 
   /**
@@ -147,6 +148,15 @@ export class Card extends Component<IProduct> {
         return CATEGORY_STYLES.additional.className;
       default:
         return CATEGORY_STYLES.other.className;
+    }
+  }
+  /**
+   * Отключает кнопку если цена не установлена
+   * @param {number | null} value - Цена
+   */
+  private disableButton(value: number | null) {
+    if (!value && this._button) {
+      this._button.disabled = true;
     }
   }
 }

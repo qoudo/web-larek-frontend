@@ -187,7 +187,7 @@ const handlers = {
 		const total = products.reduce((total, product) => total + product.price, 0)
 		components.basket.totalCost = total
 		app.order.total = total;
-		const disabled = total === null;
+		const disabled = total === 0;
 		components.basket.toggleButton(disabled)
 	},
 
@@ -245,7 +245,7 @@ const subscribeToEvents = () => {
 	events.on(EVENTS.basketChanged, handlers.basketChanged)
 
   // Открытие корзины
-	events.on(EVENTS.basketOpen, () => { modal.render({ content: components.basket.render({})})})
+	events.on(EVENTS.basketOpen, () => modal.render({ content: components.basket.render({})}))
 
 	// Изменение счетчика корзины
 	events.on(EVENTS.counterChanged, () => page.counter = app.basket.length)
@@ -258,6 +258,12 @@ const subscribeToEvents = () => {
 
   // Заполнена форма данных о контакте
 	events.on(EVENTS.contactsReady, () => components.contacts.success = true)
+
+	// Открыто модадльное окно
+	events.on(EVENTS.modalOpen, () => page.wrapperLockScroll = true)
+
+	// Закрыто модальное окно
+	events.on(EVENTS.modalClose, () => page.wrapperLockScroll = false )
 };
 
 /**

@@ -18,11 +18,13 @@ export const EVENTS = {
 	productToggle: 'product:toggle',
 	orderOpen: 'order:open',
 	basketOpen: 'basket:open',
+	modalOpen: 'modal:open',
 	orderSubmit: 'order:submit',
 	contactsSubmit: 'contacts:submit',
 	cardSelect: 'card:select',
 	productAdd: 'product:add',
 	productDelete: 'product:delete',
+	modalClose: 'modal:close',
 };
 
 /** Методы оплаты */

@@ -15,7 +15,7 @@ export class Page extends Component<IPage> {
   /** Основная обертка страницы */
   protected _wrapper: HTMLElement;
   /** Кнопка корзины в шапке */
-  protected _сartButton: HTMLElement;
+  protected _cartButton: HTMLElement;
 
   /**
    * Создает экземпляр страницы
@@ -29,10 +29,10 @@ export class Page extends Component<IPage> {
     this._counter = ensureElement<HTMLElement>('.header__basket-counter');
     this._catalog = ensureElement<HTMLElement>('.gallery');
     this._wrapper = ensureElement<HTMLElement>('.page__wrapper');
-    this._сartButton = ensureElement<HTMLElement>('.header__basket');
+    this._cartButton = ensureElement<HTMLElement>('.header__basket');
 
     // Привязка обработчика клика по корзине
-    this._сartButton.addEventListener('click', this.handleCartClick.bind(this));
+    this._cartButton.addEventListener('click', this.handleCartClick.bind(this));
   }
 
   /**
@@ -56,5 +56,13 @@ export class Page extends Component<IPage> {
    */
   private handleCartClick(): void {
     this.events.emit(EVENTS.basketOpen);
+  }
+
+  /**
+   * Управляет блокировкой прокрутки страницы
+   * @param {boolean} value - Флаг блокировки
+   */
+  set wrapperLockScroll(value: boolean) {
+    this._wrapper.classList.toggle('page__wrapper_locked', value);
   }
 }
